@@ -2,15 +2,13 @@
 import { useEffect, useState} from "react";
 import { getData } from "../helpers/getData";
 
-export const useUrl = (edp,pg) =>{
+export const useUrl = (edp,pg,search='') =>{
 
   const [state, setState] = useState({ res:[], error: null, loading: true });
 
   const base=`https://api.themoviedb.org/3`
 
-  const apiKey=`e62c23c6a89f44bb94e028fd9db54528`;
-
-  const url= `${base}${edp}?api_key=${apiKey}&page=${pg}&page_size=18`;
+  const url= `${base}${edp}?api_key=${process.env.REACT_APP_API_KEY}&page=${pg}&search=${search}`;
 
   useEffect(() => {
     try {

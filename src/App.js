@@ -6,6 +6,7 @@ import { darkTheme, theme } from "./context/customtheme";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { themeSettings } from "./theme";
 
+
 function App() {
   const mode='dark'
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -14,7 +15,7 @@ function App() {
 
     // </ThemeProvider>
     <Container
-      sx={{ bgColor: "primary.main" }}
+      maxWidth="l"
       md={{ border: 1, mt: 2, mb: 2 }}
     >
       <ThemeProvider theme={theme}>

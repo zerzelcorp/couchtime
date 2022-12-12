@@ -37,12 +37,16 @@ export const HomeView = () => {
   const {palette} = useTheme();
   
   const [endpnt, setEndpoint] = useState(`/discover/movie`);
+  const [search,setSearch]=useState('');
 
   const { count: page, incCount, decCount, pageChange } = useCounter(1);
 
   //getting the data via custom hooks
-  const { res: data, loading, error } = useUrl(endpnt, page);
+  const { res: data, loading, error } = useUrl(endpnt,page,search);
 
+  const handleSearchChange=({target})=>{
+    setSearch(target.value)
+  }
   //  const ctrctFilters = (n, c, o) => {
   //      setEndpoint(new Endpoint(n, c, o));
   //   };
@@ -81,7 +85,12 @@ export const HomeView = () => {
                   CouchTime
                 </Typography>
               </Box>
-             <TextField sx={{width:"100%"}} label="Search" variant="standard"/>
+             <TextField
+             value={search}
+             onChange={handleSearchChange}
+             sx={{width:"100%"}} 
+             label="Search" 
+             variant="standard"/>
               <Divider />
           {/* nxt adn prev page btns */}
           <Box alignSelf="center" mb={2} mt={2}>
