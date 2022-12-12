@@ -1,5 +1,5 @@
 
-import React,{useEffect, useState} from 'react'
+import React,{useState} from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,11 +10,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { LoginRounded } from '@mui/icons-material';
-import axios from 'axios';
 import { useTheme } from '@mui/material';
 
 
@@ -24,7 +22,7 @@ const Nav = () => {
 
   const {palette} = useTheme()
 
-  const pages = ['Home', 'Series', 'Contact'];
+  const pages = ['Home','Movies','Series'];
   const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
   
   const handleOpenNavMenu = (event) => {
@@ -78,10 +76,28 @@ const Nav = () => {
             }}
           >
               <MenuItem onClick={handleCloseNavMenu}>
-                <NavLink  to="/" color={palette.primary.dark} >Home</NavLink>
+                <NavLink 
+                to="/" 
+                style={{color:"white",textDecoration:"none"}}
+                >
+                  Home
+                  </NavLink>
+              </MenuItem>
+
+              <MenuItem>
+                <NavLink  
+                to="/movies" 
+                style={{color:"white",textDecoration:"none"}}
+                >Movies
+                </NavLink>
               </MenuItem>
               <MenuItem>
-                <NavLink  to="/">Series</NavLink>
+                <NavLink 
+                to="/"
+                style={{color:"white",textDecoration:"none"}}
+                >
+                  Series
+                </NavLink>
               </MenuItem>
           </Menu>
         </Box>

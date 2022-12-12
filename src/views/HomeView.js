@@ -23,50 +23,58 @@ import "animate.css";
 import Header from "../components/Header";
 import { Endpoint } from "../helpers/endpoint_class";
 import { endpoints } from "../helpers/endpoints";
-import { Outlet } from "react-router-dom";
 import { Container } from "@mui/system";
 import { cleanup } from "@testing-library/react";
-// import { Swiper, SwiperSlide } from "swiper/react";
-// // Import Swiper styles
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import { Pagination } from "swiper";
+import Sw from "../components/Sw";
 
 export const HomeView = () => {
+  const { palette } = useTheme();
 
-  const {palette} = useTheme();
+  // const [endpoints, setEndpoint] = useState(`/discover/movie`);
   
-  const [endpnt, setEndpoint] = useState(`/discover/movie`);
-  const [search,setSearch]=useState('');
+  const [search, setSearch] = useState("");
 
-  const { count: page, incCount, decCount, pageChange } = useCounter(1);
+  const endpoints = [
+    `/movie/top_rated`,
+    `/movie/popular`,
+    `/trending/movie/day`,
+    `/trending/movie/week`
+  ];
 
-  //getting the data via custom hooks
-  const { res: data, loading, error } = useUrl(endpnt,page,search);
+  const handleSearchChange = ({ target }) => {
+    setSearch(target.value);
+    // setEndpoint("/search/movie");
+    // setEndpoint("");
+    // }else{
+    //   setSearch('')
+    //   setEndpoint("/discover/movie")
+    // }
+  };
 
-  const handleSearchChange=({target})=>{
-    setSearch(target.value)
-  }
-  //  const ctrctFilters = (n, c, o) => {
-  //      setEndpoint(new Endpoint(n, c, o));
-  //   };
+  const ctrctFilters = (n, c, o) => {
+    return 1;
+  };
+  // useEffect(() => {
+  //   setSearch("");
+  // }, []);
 
   return (
-    <Container fixed>
-      {data ? (
+    <>
         <Box
           className="animate__animated animate__fadeIn"
           display="flex"
           flexDirection="column"
           justifyContent="center"
           flexWrap="wrap"
-          sx={{ p: 2, boxShadow: 2, height: "auto", mt: 4 }}
+          sx={{ boxShadow: 2, height: "auto", mt: 4, maxWidth: "100%" }}
         >
-          {loading ? (
-            <Typography>Loading...</Typography>
-          ) : (
-            <>
-              <Box display="flex" justifyContent="center" alignItems="center">
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ mb: 4 }}
+                className="animate__animated animate__fadeInLeft"
+              >
                 <img
                   style={{ height: "40px", width: "30px", marginRight: "8px" }}
                   alt="logo"
@@ -78,108 +86,46 @@ export const HomeView = () => {
                   sx={{
                     textAlign: "center",
                     mb: 3,
-                    mt: 3,
+                    mt: 1,
                     bgColor: "primary.light",
                   }}
                 >
                   CouchTime
                 </Typography>
               </Box>
-             <TextField
-             value={search}
-             onChange={handleSearchChange}
-             sx={{width:"100%"}} 
-             label="Search" 
-             variant="standard"/>
-              <Divider />
-          {/* nxt adn prev page btns */}
-          <Box alignSelf="center" mb={2} mt={2}>
-            <ButtonGroup variant="outlined">
-              <Button onClick={decCount}>Prev</Button>
-              <Button onClick={incCount}>Next</Button>
-            </ButtonGroup>
+              <TextField
+               value={search}
+                onChange={handleSearchChange}
+                variant="filled"
+                sx={{ width: { sm: "100%", md: "30%" }, mb: 3 }}
+                label="Search"
+              />
+              {/* SWIPPER */}
+            <Box
+                width="md"
+                sx={{
+                  display: "flex",
+                  maxWidth:"100%",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+              
+              {/* <Sw endpoint="/movie/top_rated"/> */}
+              <Typography variant="h2" color="text.secondary" sx={{mb:2}}>
+                Popular
+                </Typography>
+              <Sw endpoint="/movie/popular"/>
+              <Typography variant="h2" color="text.secondary" sx={{mb:2,mt:3}}>
+                Trending Today
+                </Typography>
+              <Sw endpoint="/trending/movie/day"/>  
+              <Typography variant="h2" color="text.secondary" sx={{mb:2,mt:3}}>
+                Upcoming
+                </Typography>
+             <Sw endpoint="/movie/upcoming"/>      
           </Box>
-          {/* MOVIES GRID */}
-          <Grid
-            container
-            spacing={3}
-            rowGap={1}
-            justifyContent="center"
-            alignContent="center"
-          >
-            {data.map((movie) => (
-              <MovieCard key={movie.id} {...movie} />
-            ))}
-          </Grid>
-            </>
-          )}
-
-          {/* Filters */}
-          {/* <Box
-        boxShadow={1}
-        display="flex"
-        gap={2}
-        alignItems="center"
-        justifyContent="center"
-        p={2}
-        sx={{ mb: 2 }}
-      >
-        <FormControl variant="standard" sx={{ width: 100 }}>
-          <InputLabel>Sort by</InputLabel>
-          <Select label="sortby">
-            <MenuItem value={1} >+18</MenuItem>
-            <MenuItem value={2} >Date</MenuItem>
-            <MenuItem value={3} >Genre</MenuItem>
-          </Select>
-        </FormControl>}
-        <ButtonGroup variant="contained">
-          <Button onClick={ctrctFilters("movie", "now_playing")}>
-            In Theatres
-          </Button>
-          <Button onClick={ctrctFilters("movie", "top_rated")}>
-            Top Rated
-          </Button>
-          <Button>Popular</Button>
-          <Button onClick={ctrctFilters("trending", "movie", "week")}>
-            Week
-          </Button> 
-          <Button>Latest</Button>
-        </ButtonGroup>
-      </Box> */}
-          {/* SWIPPER */}
-          {/* <Swiper
-            slidesPerView={1}
-            spaceBetween={10}
-            pagination={{
-              clickable: true,
-            }}
-            breakpoints={{
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 4,
-                spaceBetween: 40,
-              },
-              1024: {
-                slidesPerView: 5,
-                spaceBetween: 50,
-              },
-            }}
-            modules={[Pagination]}
-            className="mySwiper"
-          >
-            {data.map((movie) => (
-              <SwiperSlide>
-                <MovieCard key={movie.id} {...movie} />{" "}
-              </SwiperSlide>
-            ))}
-          </Swiper> */}
         </Box>
-      ) : (
-        <Alert severity="error">error{error}</Alert>
-      )}
-    </Container>
+    </>
   );
 };

@@ -10,14 +10,17 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const LoginPage = () => {
 
 const [token, setToken] = useState(null);
 
 const [formval, setForm] = useState({name:'',password:''});
+
+const ctx = useContext(AppContext)
 
 const navigate= useNavigate()
 // const [errs,setErrors]= useState('')
@@ -46,6 +49,8 @@ const navigate= useNavigate()
         navigate({to:"/auth"})
     }
   };
+
+console.log(ctx)
 
   return (
     <Box

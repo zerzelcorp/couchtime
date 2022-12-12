@@ -17,7 +17,7 @@ const MovieCard = ({
   title,
   poster_path,
 }) => {
-
+let navigate= useNavigate()
   return (
   <Grid item sm={1} md={2} >
     {
@@ -44,13 +44,13 @@ const MovieCard = ({
         maxHeight="auto"
         src={`https://image.tmdb.org/t/p/w500${poster_path}`}
         alt={title}
+        title={title}
       />
     
     <Button 
-        // onClick={navigate({to:`/${id}`,replace:true})}
+        onClick={()=>navigate(`/${id}`,{ replace: true })}
         startIcon={<InfoRounded/>}
         >
-       <Link to={`/${id}`}>gdgf</Link>
         <Typography>More Info</Typography>
    </Button>
 
