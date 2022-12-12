@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useMemo } from "react";
+import AppRouter from "./router/AppRouter";
+import { Outlet } from "react-router";
+import { Container } from "@mui/system";
+import { darkTheme, theme } from "./context/customtheme";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { themeSettings } from "./theme";
 
 function App() {
+  const mode='dark'
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <ThemeProvider theme={darkTheme}>
+
+    // </ThemeProvider>
+    <Container
+      sx={{ bgColor: "primary.main" }}
+      md={{ border: 1, mt: 2, mb: 2 }}
+    >
+      <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <AppRouter>
+          <Outlet />
+        </AppRouter>
+        </CssBaseline>
+      </ThemeProvider>
+    </Container>
   );
 }
 

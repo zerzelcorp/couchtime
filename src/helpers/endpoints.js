@@ -1,0 +1,15 @@
+export const endpoints = {
+    discover: `/discover/movie`,
+    snglemovie:`/movie/{movie_id}`,
+    getkeywords:`/movie/{movie_id}/keywords`,
+    getsimilars:`/movie/{movie_id}/similar`,
+    getcredits:`/movie/{movie_id}/credits`,
+    trendTv:`/trending/tv/week`,
+    theatre:`/movie/now_playing`,
+    popular:`/movie/popular`,
+    topRted:`/movie/top_rated`,
+    upcoming:`/movie/upcoming`,
+    trendWeek: `/trending/movie/week`,
+    trendDay: `/trending/movie/day`,
+    genres:`/genre/movie/list`,
+  };
