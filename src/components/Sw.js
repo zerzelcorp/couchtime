@@ -35,7 +35,7 @@ const Sw = ({ endpoint,delayTime,title}) => {
             <CircularProgress />
         </Box>
       ) : (
-       <Box className="animate__animated animate__fadeInLeft">    
+       <Box className="animate__animated animate__fadeInLeft" sx={{mt:3,mb:1}}>    
         <Typography variant="h2" color="text.secondary" sx={{mb:2}}>
           {title}
         </Typography>

@@ -7,8 +7,9 @@ import {
   LanguageRounded,
   BookmarkAdd,
   BookmarkBorder,
-  ClosedCaption,
+  ClosedCaption
 } from "@mui/icons-material";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import {
   Accordion,
   AccordionDetails,
@@ -38,27 +39,36 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import moment from "moment";
 import { useUrl } from "../hooks/useUrl";
-import { useParams, Link, NavLink } from "react-router-dom";
+import { useParams, Link, NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
+import { SwiperSlide } from "swiper/react";
+import Swiper, { Autoplay } from "swiper";
 
 const SingleMovieView = () => {
 
   const { movieId } = useParams();
-  
-  const ctx = useContext(AppContext)
+  let navigate=useNavigate()
+  const ctx = useContext(AppContext);
 
   const [fav, setFav] = useState(false);
-  
-  const [videos,setVideos] = useState([])
 
-  const { res: data, loading, error } = useUrl(`/movie/${movieId}`,1);
-  
+  const [videos, setVideos] = useState([]);
+
+  const [credits, setCredits] = useState([]);
+
+  const [similars,setSimilar]=useState([]);
+
+  const { res: data, loading, error } = useUrl(`/movie/${movieId}`, 1);
 
   const handleFav = () => {
     try {
       if (ctx.user.id) {
-        let url = `${process.env.REACT_APP_URL_BASE}/account/${"#"}/favorite?api_key=${process.env.REACT_APP_API_KEY}&session_id=${ctx.user.id.data.guest_session_id}&account_id=''`;       
+        let url = `${
+          process.env.REACT_APP_URL_BASE
+        }/account/${"#"}/favorite?api_key=${
+          process.env.REACT_APP_API_KEY
+        }&session_id=${ctx.user.id.data.guest_session_id}&account_id=''`;
         // axios({
         //   method: "post",
         //   url: url,
@@ -71,11 +81,16 @@ const SingleMovieView = () => {
         // }).then((res) => {
         //   console.log("axios res", res);
         // });
-      axios.post(url,{ media_type:"movie",media_id: movieId,favorite: true,},{ headers: { "Content-type": "application/json"}})
-      .then( fv =>{
-         setFav(!fav);
-         console.log("added to list:",fv);
-      })
+        axios
+          .post(
+            url,
+            { media_type: "movie", media_id: movieId, favorite: true },
+            { headers: { "Content-type": "application/json" } }
+          )
+          .then((fv) => {
+            setFav(!fav);
+            console.log("added to list:", fv);
+          });
       } else {
         setFav(false);
         console.log("no tkn provided");
@@ -85,20 +100,36 @@ const SingleMovieView = () => {
     }
   };
 
-//  useEffect(()=>{
-//   axios.get(`${process.env.REACT_APP_URL_BASE}/movie/${movieId}/videos?api_key=${process.env.REACT_APP_API_KEY}`)
-//   .then(vds=>setVideos([vds.data]))
+  //  useEffect(()=>{
+  //   axios.get(`${process.env.REACT_APP_URL_BASE}/movie/${movieId}/videos?api_key=${process.env.REACT_APP_API_KEY}`)
+  //   .then(vds=>setVideos([vds.data]))
 
-//    console.log("movie vids",videos)
-//   // console.log("ctx sngl page",ctx.user)
-//  },[])
+  //    console.log("movie vids",videos)
+  //   // console.log("ctx sngl page",ctx.user)
+  //  },[])
+
+  // useEffect(() => {
+  //   axios.get(`${process.env.REACT_APP_URL_BASE}/movie/${movieId}/credits?api_key=${process.env.REACT_APP_API_KEY}`)
+  //     .then((cr) => {
+  //       setCredits([cr]);
+  //       console.log("credits", credits);
+  //     });
+  // },[credits]);
+
+// useEffect(()=>{
+//   axios.get(`${process.env.REACT_APP_URL_BASE}/movie/${movieId}/similar?api_key=${process.env.REACT_APP_API_KEY}`)
+//   .then((sm) => {
+//     setSimilar(sm);
+//   });
+// },[similars])
+
+// console.log("similars",similars.data.results);
 
   return (
     <>
-      { error ? (
+      {error ? (
         <Alert severity="error">An Error Ocurred</Alert>
-      ) : 
-      loading ? (
+      ) : loading ? (
         <Box
           sx={{ m: 4 }}
           display="flex"
@@ -108,15 +139,15 @@ const SingleMovieView = () => {
         >
           <CircularProgress aria-describedby="loading" aria-busy={true} />
         </Box>
-      ) : (    
+      ) : (
         <Box sx={{ p: 2, m: 2 }} className="animate__animated animate__fadeIn">
           <Breadcrumbs aria-label="breadcrumb">
-            <NavLink to="/" style={{textDecoration:"none",color:"gray"}}>
+            <NavLink to="/" style={{ textDecoration: "none", color: "gray" }}>
               <Typography color="text.primary" underline="none">
                 Home
               </Typography>
             </NavLink>
-            <NavLink style={{textDecoration:"none"}}>
+            <NavLink style={{ textDecoration: "none" }}>
               <Typography underline="hover" color="text.primary">
                 {data.title}
               </Typography>
@@ -231,24 +262,54 @@ const SingleMovieView = () => {
                     p: 2,
                   }}
                 >
-                  <Typography>Production Companies:</Typography>
                   <Box
-                    display="flex"
-                    gap={2}
-                    sx={{ flexDirection: "center", mb: 3, mt: 2 }}
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2,1fr)",
+                    }}
                   >
-                    {data.production_companies.map((p) => (
+                    {/* PRODUCTIONS COMPANIES */}
+                    <Box>
+                      <Typography>Production Companies:</Typography>
                       <Box
                         display="flex"
+                        gap={2}
+                        sx={{ flexDirection: "center", mb: 3, mt: 2 }}
+                      >
+                        {data.production_companies.map((p) => (
+                          <Box
+                           key={p.id}
+                            display="flex"
+                            sx={{
+                              flexFlow: "column-wrap",
+                              flexDirection: {
+                                sm: "column",
+                                md: "row",
+                                l: "row",
+                              },
+                            }}
+                          >
+                            <Chip label={p.name} />
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Typography>Cast</Typography>
+                      <Box
                         sx={{
-                          flexFlow: "column-wrap",
-                          flexDirection: { sm: "column", md: "row", l: "row" },
+                          display: "flex",
+                          flexFlow: "row-wrap",
+                          justifyContent: "center",
                         }}
                       >
-                        <Chip key={p.id} label={p.name} />
+                        {/* {credits.cast.map((cast_member) => (
+                          <Chip key={cast_member.id} label={cast_member.name} />
+                        ))} */}
                       </Box>
-                    ))}
+                    </Box>
                   </Box>
+
                   <Divider variant="middle" />
 
                   <Box maxWidth="100%">
@@ -280,15 +341,10 @@ const SingleMovieView = () => {
               title={data.title}
               sx={{ maxHeight: "500px", width: "100%" }}
             />
-          </Card>
-  {/* <Snackbar
-  open={fav}
-  autoHideDuration={6000}
-  onClose={handleClose}
-  message="Added to Favorites"
-  action={action}
-/> */}
-        </Box>
+          </Card> 
+    {/* SWIPER SIMILARS */}
+
+  </Box>
       )}
     </>
   );

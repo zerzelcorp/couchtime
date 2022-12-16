@@ -20,43 +20,50 @@ import {
 import MovieCard from "../components/MovieCard";
 import { useCounter } from "../hooks/useCounter";
 import { useUrl } from "../hooks/useUrl";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { SearchOutlined, SearchRounded } from "@mui/icons-material";
 
 // const btnTitles = ['In Theatres','Top Rated','Popular','Week','Latests']
 // const btnEndpoints = [`/movie/now_playing`,`/movie/top_rated`,`/movie/popular`,`/trending/movie/week`,`/movie/now_playing`]
 
-const MoviesView = () => {
-  const [endpoint, setEndpoint] = useState(`/discover/movie`);
-  const [genres,setGenres]=useState([])
-  const [search, setSearch] = useState("");
-  const [sort,setSort]=useState('')
-  const { count: page, incCount, decCount, pageChange } = useCounter(1);
+ const MoviesView = () => {
 
-  const handleSearchChange = (e) => {
+  const searchRef=useRef(null)
+
+  let initEndpnt=`/discover/movie`
+
+  const [endpoint, setEndpoint] = useState(initEndpnt);
+
+  const [genres,setGenres]=useState([])
+
+  const [search, setSearch] = useState("");
+
+  const [sort,setSort]=useState('')
+
+  const { count: page, incCount, decCount} = useCounter(1);
+
+const handleSearchChange = (e) => {
     if(e.target.value){
-      setSearch(e.target.value);
-      setEndpoint(...endpoint,"/search/movie");
+      setSearch(e.target.value);     
+      setEndpoint(`/search/movie`);
     }else{
-      setEndpoint(endpoint);
-    }
-  };
+      setSearch('');  
+      setEndpoint(initEndpnt)
+  }
+}
 
 const handleSortChange=(e)=>{
   setSort(e.target.value)
+  // Comma separated value of genre ids that you want to include in the results.
+  // query:`with_genres`
 }
 
 //getting the data via custom hooks
-const { res: data, loading, error } = useUrl(endpoint,page,search);
-
-//getting genre list
-// const {res} = useUrl(`/genre/movie/list`);
+const { res: data, loading, error } = useUrl(endpoint,page,search,sort);
 
 useEffect(() => {
    axios.get(`${process.env.REACT_APP_URL_BASE}/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`)
    .then(genres=>setGenres(genres.data.genres))
-  }, [genres])
+  },[])
 
   return (
     <>
@@ -90,10 +97,14 @@ useEffect(() => {
               >
                 <FormControl variant="standard" fullWidth>
                   <InputLabel id="sortbygenre">Sort By Genre:</InputLabel>
-                  <Select labelId="sortbygenre" label="sortby" value={sort} onChange={handleSortChange}>
+                  <Select labelId="sortbygenre" label="sortby" 
+                   value={sort}
+                   onChange={handleSortChange}
+                   >
+                    <MenuItem value="">Clear Filter</MenuItem>
                     {
                       genres.map(genre=>(
-                        <MenuItem key={genre.id} value={genre.name}>{genre.name}</MenuItem>
+                        <MenuItem key={genre.id} value={genre.id}>{genre.name}</MenuItem>
                       ))
                     } 
                   <MenuItem  value="act">act</MenuItem>
@@ -109,6 +120,7 @@ useEffect(() => {
                 </ButtonGroup>
 
                 <TextField
+                  ref={searchRef}
                   value={search}
                   onChange={handleSearchChange}
                   sx={{ width: "100%" }}
@@ -147,7 +159,5 @@ useEffect(() => {
         <Alert severity="error">error{error}</Alert>
       )}
     </>
-  );
-};
-
+  )}
 export default MoviesView;

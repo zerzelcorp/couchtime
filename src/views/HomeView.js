@@ -48,7 +48,7 @@ const [search, setSearch] = useState("");
                 value={search}
                 onChange={handleSearchChange}
                 variant="filled"
-                sx={{ width: { sm: "100%", md: "30%" }, mb: 3 }}
+                sx={{ width: { sm: "100%", md: "30%" }, mb: 1 }}
                 label="Search"
               />
           </Box>
