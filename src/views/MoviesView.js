@@ -15,23 +15,22 @@ import {
   Select,
   TextField,
   Typography,
-  Breadcrumbs,
 } from "@mui/material";
 import MovieCard from "../components/MovieCard";
 import { useCounter } from "../hooks/useCounter";
 import { useUrl } from "../hooks/useUrl";
 import { Link } from "react-router-dom";
 
-const SeriesPage = () => {
-  const [endpnt, setEndpoint] = useState(`/discover/tv`);
+const MoviesView = () => {
+  const [endpnt, setEndpoint] = useState(`/discover/movie`);
 
   const [search, setSearch] = useState("");
 
   const { count: page, incCount, decCount, pageChange } = useCounter(1);
 
   const handleSearchChange = ({ target }) => {
-    setSearch(target.value);
-    setEndpoint("/search/tv");
+      setSearch(target.value);
+      setEndpoint("/search/movie");
   };
 
   const ctrctFilters = (n, c, o) => {
@@ -39,7 +38,7 @@ const SeriesPage = () => {
   };
 
   //getting the data via custom hooks
-  const { res: data, loading, error } = useUrl(endpnt, page, search);
+  const { res: data, loading, error } = useUrl(endpnt,page,search);
 
   return (
     <>
@@ -58,14 +57,6 @@ const SeriesPage = () => {
             </Box>
           ) : (
             <>
-            <Breadcrumbs sx={{mb:2}}>
-            <Link to="/" style={{color:"gray",textDecoration:"none"}}>
-            <Typography variant="h3">Home</Typography>
-            </Link>
-            <Link to="/series" style={{color:"white",textDecoration:"none"}}>
-              <Typography variant="h3">Series</Typography>
-            </Link>
-            </Breadcrumbs>
               {/* Filters */}
               <Box
                 sx={{
@@ -136,4 +127,4 @@ const SeriesPage = () => {
   );
 };
 
-export default SeriesPage;
+export default MoviesView;

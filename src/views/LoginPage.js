@@ -43,14 +43,12 @@ const navigate= useNavigate()
     if(tkn){        
         setToken(tkn);
         console.log("token",token.data)
-        navigate({to:"/"})
+        navigate("/")
     }else{
         console.log("err")
-        navigate({to:"/auth"})
+        navigate("/auth")
     }
   };
-
-console.log(ctx)
 
   return (
     <Box

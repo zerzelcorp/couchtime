@@ -16,8 +16,8 @@ import { Box } from "@mui/system";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { useNavigate } from "react-router-dom";
 
-const Sw = ({ endpoint }) => {
-    
+const Sw = ({ endpoint ,delayTime}) => {
+
   const navigate = useNavigate();
 
   //getting the data via custom hooks
@@ -36,7 +36,7 @@ const Sw = ({ endpoint }) => {
           slidesPerView={1}
           spaceBetween={10}
           autoplay={{
-            delay: 2500,
+            delay: delayTime,
             disableOnInteraction: false,
           }}
           breakpoints={{
@@ -58,14 +58,13 @@ const Sw = ({ endpoint }) => {
           style={{ width: "100%", mt: "1em", mb: "1em" }}
         >
           {data.map((movie) => (
-            <SwiperSlide k style={{ width: "100%" }} key={movie.id}>
+            <SwiperSlide style={{ width: "100%" }} key={movie.id}>
               <img
                 style={{ width: "100%" }}
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               />
-
               <Button
-                onClick={() => navigate(`/${movie.id}`, { replace: true })}
+                onClick={() => navigate(`/${movie.id}`,{replace:true})}
                 startIcon={<ArrowOutwardIcon />}
               >
                 <Typography variant="body2">{movie.title}</Typography>

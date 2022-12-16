@@ -15,7 +15,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import { useCounter } from "../hooks/useCounter";
 import { useUrl } from "../hooks/useUrl";
@@ -26,9 +26,13 @@ import { endpoints } from "../helpers/endpoints";
 import { Container } from "@mui/system";
 import { cleanup } from "@testing-library/react";
 import Sw from "../components/Sw";
+import { AppContext } from "../context/AppContext";
 
 export const HomeView = () => {
-  const { palette } = useTheme();
+
+const { palette } = useTheme();
+
+const ctx = useContext(AppContext)
 
   // const [endpoints, setEndpoint] = useState(`/discover/movie`);
   
@@ -59,7 +63,7 @@ export const HomeView = () => {
   // }, []);
 
   return (
-    <>
+    <Container fixed>
         <Box
           className="animate__animated animate__fadeIn"
           display="flex"
@@ -68,38 +72,15 @@ export const HomeView = () => {
           flexWrap="wrap"
           sx={{ boxShadow: 2, height: "auto", mt: 4, maxWidth: "100%" }}
         >
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ mb: 4 }}
-                className="animate__animated animate__fadeInLeft"
-              >
-                <img
-                  style={{ height: "40px", width: "30px", marginRight: "8px" }}
-                  alt="logo"
-                  src="poplogo.png"
-                />
-                <Typography
-                  variant="title"
-                  component="h1"
-                  sx={{
-                    textAlign: "center",
-                    mb: 3,
-                    mt: 1,
-                    bgColor: "primary.light",
-                  }}
-                >
-                  CouchTime
-                </Typography>
-              </Box>
+          <Box sx={{display:"flex",width:"100%",justifyContent:"center"}}>
               <TextField
-               value={search}
+                value={search}
                 onChange={handleSearchChange}
                 variant="filled"
                 sx={{ width: { sm: "100%", md: "30%" }, mb: 3 }}
                 label="Search"
               />
+          </Box>
               {/* SWIPPER */}
             <Box
                 width="md"
@@ -115,17 +96,17 @@ export const HomeView = () => {
               <Typography variant="h2" color="text.secondary" sx={{mb:2}}>
                 Popular
                 </Typography>
-              <Sw endpoint="/movie/popular"/>
+              <Sw endpoint="/movie/popular" delayTime={2500}/>
               <Typography variant="h2" color="text.secondary" sx={{mb:2,mt:3}}>
                 Trending Today
                 </Typography>
-              <Sw endpoint="/trending/movie/day"/>  
+              <Sw endpoint="/trending/movie/day" delayTime={3200}/>  
               <Typography variant="h2" color="text.secondary" sx={{mb:2,mt:3}}>
                 Upcoming
                 </Typography>
-             <Sw endpoint="/movie/upcoming"/>      
+             <Sw endpoint="/movie/upcoming" delayTime={3000}/>      
           </Box>
         </Box>
-    </>
+    </Container>
   );
 };

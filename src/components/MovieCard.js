@@ -15,11 +15,13 @@ const MovieCard = ({
   popularity,
   vote_average,
   title,
+  name,
+  first_air_date,
   poster_path,
 }) => {
 let navigate= useNavigate()
   return (
-  <Grid item sm={1} md={2} >
+  <Grid item xs={4} md={2} >
     {
       poster_path?
       (
@@ -36,19 +38,19 @@ let navigate= useNavigate()
             {vote_average}
           </Avatar>
         }
-        subheader={moment(release_date).format("LL")
+        subheader={moment(release_date?release_date:first_air_date).format("LL")
       } 
       />
       <CardMedia
         component="img"
         maxHeight="auto"
         src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-        alt={title}
-        title={title}
+        alt={title?title:name}
+        title={title?title:name}
       />
     
     <Button 
-        onClick={()=>navigate(`/${id}`,{ replace: true })}
+        onClick={()=>navigate(`/${id}`)}
         startIcon={<InfoRounded/>}
         >
         <Typography>More Info</Typography>
@@ -57,7 +59,7 @@ let navigate= useNavigate()
       <CardContent>     
         <Box md={{ display: "flex", columnGap: 3 }}>
           <Typography gutterBottom component="h6" variant="h6">          
-            {title}
+            {title?title:name}
           </Typography> 
         </Box>
       </CardContent> 

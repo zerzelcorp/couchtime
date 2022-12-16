@@ -5,25 +5,28 @@ import Footer from '../components/Footer'
 import Nav from '../components/Nav'
 import {HomeView} from '../views/HomeView'
 import LoginPage from '../views/LoginPage'
-import MoviesPage from '../views/MoviesPage'
+import MoviesView from '../views/MoviesView'
 import SeriesPage from '../views/SeriesPage'
 import SignUp from '../views/SignUp'
 import SingleMovieView from '../views/SingleMovieView'
+import TestPage from '../views/TestPage'
+import WatchList from '../views/WatchList'
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Nav/>
       <Routes>
-        <Route path="/" element={<App/>}/>
+        <Route path="/"  element={<App/>}/>  
         <Route index element={<HomeView/>}/>  
-        <Route path="/movies" element={<MoviesPage/>}/>  
-        <Route path="/series" element={<SeriesPage/>}/>  
-        <Route path="/:movieId" element={<SingleMovieView/>}/>          
-        <Route path="/auth" element={<LoginPage/>}/>   
-        <Route path="/signup" element={<SignUp/>}/> 
+        <Route path="movies" element={<MoviesView/>}/>  
+        <Route path=":movieId" element={<SingleMovieView/>}/>  
+        <Route path="series" element={<SeriesPage/>}/>  
+        <Route path="mylist/:id" element={<WatchList/>}/>    
+        <Route path="auth" element={<LoginPage/>}/>   
+        <Route path="signup" element={<SignUp/>}/> 
       </Routes>
-      <Footer/>
+      {/* <Footer/> */}
     </BrowserRouter>
   )
 }
