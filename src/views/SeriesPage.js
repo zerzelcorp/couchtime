@@ -78,7 +78,7 @@ const SeriesPage = () => {
                 gap={2}
                 p={2}
               >
-                <FormControl variant="standard" sx={{ width: 100 }}>
+                <FormControl variant="standard" sx={{ width: "100%" }}>
                   <InputLabel>Sort by</InputLabel>
                   <Select label="sortby">
                     <MenuItem value={1}>+18</MenuItem>

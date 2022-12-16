@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Grid,
   Alert,
@@ -22,23 +22,32 @@ import { useUrl } from "../hooks/useUrl";
 import { Link } from "react-router-dom";
 
 const MoviesView = () => {
-  const [endpnt, setEndpoint] = useState(`/discover/movie`);
-
+  const [endpoint, setEndpoint] = useState(`/discover/movie`);
   const [search, setSearch] = useState("");
-
+  const [sort,setSort]=useState('')
   const { count: page, incCount, decCount, pageChange } = useCounter(1);
 
-  const handleSearchChange = ({ target }) => {
-      setSearch(target.value);
-      setEndpoint("/search/movie");
+  const handleSearchChange = (e) => {
+    if(e.target.value){
+      setSearch(e.target.value);
+      setEndpoint(...endpoint,"/search/movie");
+    }else{
+      setEndpoint(endpoint);
+    }
   };
 
-  const ctrctFilters = (n, c, o) => {
-    return 1;
-  };
+const handleSortChange=(e)=>{
+  setSort(e.target.value)
+}
 
-  //getting the data via custom hooks
-  const { res: data, loading, error } = useUrl(endpnt,page,search);
+//getting the data via custom hooks
+const { res: data, loading, error } = useUrl(endpoint,page,search);
+
+//getting genre list
+const {res} = useUrl(`/genre/movie/list`);
+
+// useEffect(() => {
+// }, [data])
 
   return (
     <>
@@ -63,33 +72,33 @@ const MoviesView = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "flex-start",
-                  mb: 2,
+                  flexDirection:{xs:"column",md:"row"},
+                  mb: 1,
                 }}
                 boxShadow={1}
                 gap={2}
                 p={2}
               >
-                <FormControl variant="standard" sx={{ width: 100 }}>
-                  <InputLabel>Sort by</InputLabel>
-                  <Select label="sortby">
-                    <MenuItem value={1}>+18</MenuItem>
-                    <MenuItem value={2}>Date</MenuItem>
-                    <MenuItem value={3}>Genre</MenuItem>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel id="sortbygenre">Sort By Genre:</InputLabel>
+                  <Select labelId="sortbygenre" label="sortby" value={sort} onChange={handleSortChange}>
+                    {/* {
+                      res.genres.map(genre=>(
+                        <MenuItem key={genre.id} value={genre.name}>{genre.name}</MenuItem>
+                      ))
+                    }  */}
+                  <MenuItem  value="act">act</MenuItem>
                   </Select>
                 </FormControl>
-                <ButtonGroup variant="contained">
-                  <Button onClick={ctrctFilters("movie", "now_playing")}>
-                    In Theatres
-                  </Button>
-                  <Button onClick={ctrctFilters("movie", "top_rated")}>
-                    Top Rated
-                  </Button>
-                  <Button>Popular</Button>
-                  <Button onClick={ctrctFilters("trending", "movie", "week")}>
-                    Week
-                  </Button>
-                  <Button>Latest</Button>
+
+                <ButtonGroup variant="outlined">
+                  <Button onClick={()=>{setEndpoint(`/movie/now_playing`)}}> In Theatres</Button>
+                  <Button onClick={()=>{setEndpoint(`/movie/top_rated`)}}>Top Rated</Button>
+                  <Button onClick={()=>{setEndpoint(`/movie/popular`)}}>Popular</Button>
+                  <Button onClick={()=>{setEndpoint(`/trending/movie/week`)}}>Week</Button>
+                  <Button onClick={()=>{setEndpoint(`/movie/now_playing`)}}>Latest</Button>          
                 </ButtonGroup>
+
                 <TextField
                   value={search}
                   onChange={handleSearchChange}
@@ -99,9 +108,10 @@ const MoviesView = () => {
                 />
               </Box>
               {/* nxt adn prev page btns */}
-              <Box alignSelf="center" mb={2} mt={2}>
+              <Box alignSelf="center" mb={2} mt={1}>
                 <ButtonGroup variant="outlined">
                   <Button onClick={decCount}>Prev</Button>
+                   <Button>{page}</Button>
                   <Button onClick={incCount}>Next</Button>
                 </ButtonGroup>
               </Box>

@@ -43,7 +43,7 @@ let navigate= useNavigate()
       />
       <CardMedia
         component="img"
-        maxHeight="auto"
+        sx={{maxHeight:"auto"}}
         src={`https://image.tmdb.org/t/p/w500${poster_path}`}
         alt={title?title:name}
         title={title?title:name}

@@ -50,9 +50,9 @@ const SingleMovieView = () => {
 
   const [fav, setFav] = useState(false);
 
-  const { res: data, loading, error } = useUrl(`/movie/${movieId}`, 1);
+  const { res: data, loading, error } = useUrl(`/movie/${movieId}`,1);
   
-  console.log("ctx sngl page",ctx.user.id.data)
+  console.log("ctx sngl page",ctx.user)
   
   const handleFav = () => {
     try {
@@ -86,7 +86,6 @@ const SingleMovieView = () => {
  
   return (
     <>
-
       { error ? (
         <Alert severity="error">An Error Ocurred</Alert>
       ) : 
@@ -269,6 +268,7 @@ const SingleMovieView = () => {
               component="img"
               src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
               alt={data.title}
+              title={data.title}
               sx={{ maxHeight: "500px", width: "100%" }}
             />
           </Card>
