@@ -49,11 +49,12 @@ const SingleMovieView = () => {
   const ctx = useContext(AppContext)
 
   const [fav, setFav] = useState(false);
+  
+  const [videos,setVideos] = useState([])
 
   const { res: data, loading, error } = useUrl(`/movie/${movieId}`,1);
   
-  console.log("ctx sngl page",ctx.user)
-  
+
   const handleFav = () => {
     try {
       if (ctx.user.id) {
@@ -83,7 +84,15 @@ const SingleMovieView = () => {
       console.log("you are not authenticated");
     }
   };
- 
+
+//  useEffect(()=>{
+//   axios.get(`${process.env.REACT_APP_URL_BASE}/movie/${movieId}/videos?api_key=${process.env.REACT_APP_API_KEY}`)
+//   .then(vds=>setVideos([vds.data]))
+
+//    console.log("movie vids",videos)
+//   // console.log("ctx sngl page",ctx.user)
+//  },[])
+
   return (
     <>
       { error ? (
@@ -100,7 +109,7 @@ const SingleMovieView = () => {
           <CircularProgress aria-describedby="loading" aria-busy={true} />
         </Box>
       ) : (    
-        <Box sx={{ p: 2, m: 2 }}>
+        <Box sx={{ p: 2, m: 2 }} className="animate__animated animate__fadeIn">
           <Breadcrumbs aria-label="breadcrumb">
             <NavLink to="/" style={{textDecoration:"none",color:"gray"}}>
               <Typography color="text.primary" underline="none">

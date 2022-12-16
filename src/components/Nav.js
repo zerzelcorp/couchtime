@@ -12,10 +12,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LoginRounded } from "@mui/icons-material";
-import { Tooltip, useTheme } from "@mui/material";
+import { Slide, Tooltip, useScrollTrigger, useTheme } from "@mui/material";
 import { AppContext } from "../context/AppContext";
 import useTokenGuest from "../hooks/useTokenGuest";
 import axios from "axios";
+import UserLists from "../views/UserLists";
 
 const pages = ["Home", "Movies", "Series"];
 
@@ -317,13 +318,14 @@ const Nav = () => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <NavLink
-                        to={`/mylist/:id`}
+                    <MenuItem onClick={handleCloseUserMenu} component="text">
+                      {/* <NavLink
+                        to={`/mylists`}
                         style={{ color: "white", textDecoration: "none" }}
                       >
                         <Typography>My List</Typography>
-                      </NavLink>
+                      </NavLink> */}
+                      <UserLists/>
                     </MenuItem>
                     <MenuItem onClick={handleCloseUserMenu}>
                       <NavLink

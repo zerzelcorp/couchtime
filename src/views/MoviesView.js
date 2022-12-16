@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Grid,
   Alert,
@@ -15,14 +15,21 @@ import {
   Select,
   TextField,
   Typography,
+  InputAdornment,
 } from "@mui/material";
 import MovieCard from "../components/MovieCard";
 import { useCounter } from "../hooks/useCounter";
 import { useUrl } from "../hooks/useUrl";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { SearchOutlined, SearchRounded } from "@mui/icons-material";
+
+// const btnTitles = ['In Theatres','Top Rated','Popular','Week','Latests']
+// const btnEndpoints = [`/movie/now_playing`,`/movie/top_rated`,`/movie/popular`,`/trending/movie/week`,`/movie/now_playing`]
 
 const MoviesView = () => {
   const [endpoint, setEndpoint] = useState(`/discover/movie`);
+  const [genres,setGenres]=useState([])
   const [search, setSearch] = useState("");
   const [sort,setSort]=useState('')
   const { count: page, incCount, decCount, pageChange } = useCounter(1);
@@ -44,10 +51,12 @@ const handleSortChange=(e)=>{
 const { res: data, loading, error } = useUrl(endpoint,page,search);
 
 //getting genre list
-const {res} = useUrl(`/genre/movie/list`);
+// const {res} = useUrl(`/genre/movie/list`);
 
-// useEffect(() => {
-// }, [data])
+useEffect(() => {
+   axios.get(`${process.env.REACT_APP_URL_BASE}/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`)
+   .then(genres=>setGenres(genres.data.genres))
+  }, [genres])
 
   return (
     <>
@@ -82,11 +91,11 @@ const {res} = useUrl(`/genre/movie/list`);
                 <FormControl variant="standard" fullWidth>
                   <InputLabel id="sortbygenre">Sort By Genre:</InputLabel>
                   <Select labelId="sortbygenre" label="sortby" value={sort} onChange={handleSortChange}>
-                    {/* {
-                      res.genres.map(genre=>(
+                    {
+                      genres.map(genre=>(
                         <MenuItem key={genre.id} value={genre.name}>{genre.name}</MenuItem>
                       ))
-                    }  */}
+                    } 
                   <MenuItem  value="act">act</MenuItem>
                   </Select>
                 </FormControl>
@@ -105,6 +114,10 @@ const {res} = useUrl(`/genre/movie/list`);
                   sx={{ width: "100%" }}
                   label="Search"
                   variant="standard"
+                  // endAdornment={<InputAdornment position="end">
+                  //      <SearchRounded color="text.primary"/>
+                  //   </InputAdornment>
+                  //   }
                 />
               </Box>
               {/* nxt adn prev page btns */}

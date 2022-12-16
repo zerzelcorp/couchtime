@@ -9,8 +9,8 @@ import MoviesView from '../views/MoviesView'
 import SeriesPage from '../views/SeriesPage'
 import SignUp from '../views/SignUp'
 import SingleMovieView from '../views/SingleMovieView'
-import TestPage from '../views/TestPage'
-import WatchList from '../views/WatchList'
+import UserLists from '../views/UserLists'
+
 
 const AppRouter = () => {
   return (
@@ -22,7 +22,7 @@ const AppRouter = () => {
         <Route path="movies" element={<MoviesView/>}/>  
         <Route path=":movieId" element={<SingleMovieView/>}/>  
         <Route path="series" element={<SeriesPage/>}/>  
-        <Route path="mylist/:id" element={<WatchList/>}/>    
+        <Route path="mylists" element={<UserLists/>}/>    
         <Route path="auth" element={<LoginPage/>}/>   
         <Route path="signup" element={<SignUp/>}/> 
       </Routes>

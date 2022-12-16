@@ -16,7 +16,7 @@ import { Box } from "@mui/system";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { useNavigate } from "react-router-dom";
 
-const Sw = ({ endpoint ,delayTime}) => {
+const Sw = ({ endpoint,delayTime,title}) => {
 
   const navigate = useNavigate();
 
@@ -26,12 +26,19 @@ const Sw = ({ endpoint ,delayTime}) => {
   return (
     <>
       {loading ? (
-        <Box display="flex" sx={{ gap: 2 }}>
+        <Box display="flex" justifyContent="center" alignItems="center" 
+        sx={{ gap: 2 }}
+        >
+          {/* <Skeleton variant="rectangular" />
           <Skeleton variant="rectangular" />
-          <Skeleton variant="rectangular" />
-          <Skeleton variant="rectangular" />
+          <Skeleton variant="rectangular" /> */}
+            <CircularProgress />
         </Box>
       ) : (
+       <Box className="animate__animated animate__fadeInLeft">    
+        <Typography variant="h2" color="text.secondary" sx={{mb:2}}>
+          {title}
+        </Typography>
         <Swiper
           slidesPerView={1}
           spaceBetween={10}
@@ -72,6 +79,8 @@ const Sw = ({ endpoint ,delayTime}) => {
             </SwiperSlide>
           ))}
         </Swiper>
+       
+       </Box>
       )}
     </>
   );
